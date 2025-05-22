@@ -1,0 +1,25 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# WhatsApp session data
+session/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Processed emails tracking
+processed_emails.json
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo

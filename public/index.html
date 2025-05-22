@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Email Automation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-white dark:bg-gray-800 shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <i class="ri-whatsapp-line text-green-500 text-2xl mr-2"></i>
+                        <h1 class="text-xl font-semibold">WhatsApp Email Automation</h1>
+                    </div>
+                    <div class="flex items-center">
+                        <div id="whatsapp-status" class="flex items-center text-sm">
+                            <div class="w-3 h-3 bg-gray-300 rounded-full mr-2"></div>
+                            <span>Checking connection...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main content -->
+        <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- API Keys Configuration -->
+                <div class="col-span-1 lg:col-span-3 bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
+                    <h2 class="text-xl font-semibold mb-4">API Configuration</h2>
+                    <div id="api-keys-form">
+                        <div id="gmail-api-status" class="mb-4 text-sm bg-gray-100 dark:bg-gray-700 p-3 rounded-md">
+                            Checking Gmail API configuration...
+                        </div>
+                        <form id="credentials-form" class="space-y-4">
+                            <div>
+                                <label for="gmail-client-id" class="block text-sm font-medium">Gmail Client ID</label>
+                                <input type="text" id="gmail-client-id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 p-2">
+                            </div>
+                            <div>
+                                <label for="gmail-client-secret" class="block text-sm font-medium">Gmail Client Secret</label>
+                                <input type="password" id="gmail-client-secret" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 p-2">
+                            </div>
+                            <div>
+                                <label for="gmail-refresh-token" class="block text-sm font-medium">Gmail Refresh Token</label>
+                                <input type="password" id="gmail-refresh-token" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 p-2">
+                            </div>
+                            <div class="pt-2">
+                                <button type="submit" id="save-credentials-btn" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Save API Keys
+                                </button>
+                                <div id="credentials-feedback" class="mt-2 text-sm"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Contact Mapping -->
+                <div class="col-span-1 lg:col-span-2 bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Email to WhatsApp Mapping</h2>
+                        <button id="add-contact-btn" class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <i class="ri-user-add-line mr-1"></i> Add Contact
+                        </button>
+                    </div>
+
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                        <div id="contacts-list" class="space-y-3">
+                            <div class="text-sm text-gray-500 dark:text-gray-400 py-4 text-center">
+                                Loading contacts...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status and Help -->
+                <div class="col-span-1 space-y-6">
+                    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                        <h2 class="text-xl font-semibold mb-4">System Status</h2>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Server Status:</span>
+                                <span id="server-status" class="text-sm font-medium text-green-500">Online</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-500 dark:text-gray-400">WhatsApp:</span>
+                                <span id="whatsapp-connected" class="text-sm font-medium text-gray-500">Checking...</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-sm text-gray-500 dark:text-gray-400">Processed Emails:</span>
+                                <span id="processed-emails" class="text-sm font-medium text-gray-500">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+                        <h2 class="text-xl font-semibold mb-4">Quick Help</h2>
+                        <div class="space-y-3 text-sm">
+                            <p><strong>Gmail API:</strong> Create credentials in Google Cloud Console.</p>
+                            <p><strong>WhatsApp:</strong> Scan the QR code when prompted in server logs.</p>
+                            <p><strong>Contacts:</strong> Map client emails to their WhatsApp numbers.</p>
+                            <a href="https://github.com/your-username/whatsapp-email-automation" class="text-indigo-600 hover:text-indigo-500 block mt-4">View Full Documentation</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-white dark:bg-gray-800 shadow-sm mt-auto">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">WhatsApp Email Automation</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Created with ❤️</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal for adding/editing contacts -->
+    <div id="contact-modal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <h3 class="text-lg leading-6 font-medium" id="modal-title">Add New Contact</h3>
+                    <div class="mt-4">
+                        <form id="contact-form" class="space-y-4">
+                            <input type="hidden" id="contact-form-mode" value="add">
+                            <div>
+                                <label for="contact-email" class="block text-sm font-medium">Email Address</label>
+                                <input type="email" id="contact-email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 p-2" required>
+                            </div>
+                            <div>
+                                <label for="contact-phone" class="block text-sm font-medium">WhatsApp Number</label>
+                                <input type="tel" id="contact-phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 p-2" placeholder="+1234567890" required>
+                                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Include country code (e.g., +1 for US)</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="save-contact-btn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Save
+                    </button>
+                    <button type="button" id="cancel-contact-btn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
