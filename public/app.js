@@ -212,38 +212,38 @@ const app = {
       // Update WhatsApp status
       if (whatsappStatus.connected) {
         elements.whatsappStatus.innerHTML = `
-          <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+          <div class="status-indicator status-connected"></div>
           <span>Connected as ${whatsappStatus.info.name}</span>
         `;
         elements.whatsappConnected.textContent = 'Connected';
-        elements.whatsappConnected.classList.remove('text-gray-500', 'text-red-500');
-        elements.whatsappConnected.classList.add('text-green-500');
+        elements.whatsappConnected.classList.remove('text-white/60', 'text-red-500');
+        elements.whatsappConnected.classList.add('text-accent');
       } else {
         elements.whatsappStatus.innerHTML = `
-          <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+          <div class="status-indicator status-disconnected"></div>
           <span>Disconnected</span>
         `;
         elements.whatsappConnected.textContent = 'Disconnected';
-        elements.whatsappConnected.classList.remove('text-gray-500', 'text-green-500');
+        elements.whatsappConnected.classList.remove('text-white/60', 'text-accent');
         elements.whatsappConnected.classList.add('text-red-500');
       }
       
       // Update health status
       if (healthStatus.status === 'running') {
         elements.serverStatus.textContent = 'Online';
-        elements.serverStatus.classList.remove('text-gray-500', 'text-red-500');
-        elements.serverStatus.classList.add('text-green-500');
+        elements.serverStatus.classList.remove('text-white/60', 'text-red-500');
+        elements.serverStatus.classList.add('text-accent');
       } else {
         elements.serverStatus.textContent = 'Offline';
-        elements.serverStatus.classList.remove('text-gray-500', 'text-green-500');
+        elements.serverStatus.classList.remove('text-white/60', 'text-accent');
         elements.serverStatus.classList.add('text-red-500');
       }
       
       // Update processed emails count
       if (healthStatus.processedEmails !== undefined) {
         elements.processedEmails.textContent = healthStatus.processedEmails;
-        elements.processedEmails.classList.remove('text-gray-500');
-        elements.processedEmails.classList.add('text-indigo-600');
+        elements.processedEmails.classList.remove('text-white/60');
+        elements.processedEmails.classList.add('text-accent');
       }
     } catch (error) {
       console.error('Error updating status:', error);
@@ -260,12 +260,12 @@ const app = {
       if (credStatus.gmailConfigured) {
         elements.gmailApiStatus.innerHTML = `
           <div class="flex items-center">
-            <i class="ri-checkbox-circle-line text-green-500 mr-2"></i>
+            <i class="ri-checkbox-circle-line text-accent mr-2"></i>
             <span>Gmail API configured successfully</span>
           </div>
         `;
-        elements.gmailApiStatus.classList.remove('bg-gray-100', 'dark:bg-gray-700');
-        elements.gmailApiStatus.classList.add('bg-green-50', 'dark:bg-green-900', 'text-green-800', 'dark:text-green-200');
+        elements.gmailApiStatus.classList.remove('glass');
+        elements.gmailApiStatus.classList.add('glass-card', 'border-accent/30');
       } else {
         elements.gmailApiStatus.innerHTML = `
           <div class="flex items-center">
@@ -273,8 +273,8 @@ const app = {
             <span>Gmail API not configured</span>
           </div>
         `;
-        elements.gmailApiStatus.classList.remove('bg-gray-100', 'dark:bg-gray-700');
-        elements.gmailApiStatus.classList.add('bg-yellow-50', 'dark:bg-yellow-900', 'text-yellow-800', 'dark:text-yellow-200');
+        elements.gmailApiStatus.classList.remove('glass');
+        elements.gmailApiStatus.classList.add('glass-card', 'border-yellow-500/30');
       }
     } catch (error) {
       console.error('Error loading credentials status:', error);
@@ -284,8 +284,8 @@ const app = {
           <span>Error checking Gmail API configuration</span>
         </div>
       `;
-      elements.gmailApiStatus.classList.remove('bg-gray-100', 'dark:bg-gray-700');
-      elements.gmailApiStatus.classList.add('bg-red-50', 'dark:bg-red-900', 'text-red-800', 'dark:text-red-200');
+      elements.gmailApiStatus.classList.remove('glass');
+      elements.gmailApiStatus.classList.add('glass-card', 'border-red-500/30');
     }
   },
   
@@ -298,6 +298,7 @@ const app = {
       </svg>
       Saving...
     `;
+    elements.saveCredentialsBtn.classList.add('opacity-75');
     
     try {
       const credentials = {
@@ -359,7 +360,7 @@ const app = {
     
     if (contactEmails.length === 0) {
       elements.contactsList.innerHTML = `
-        <div class="text-sm text-gray-500 py-4 text-center">
+        <div class="text-sm text-white/60 py-4 text-center">
           No contacts added yet. Click "Add Contact" to get started.
         </div>
       `;
@@ -373,20 +374,20 @@ const app = {
     contactEmails.forEach(email => {
       const phone = this.currentContacts[email];
       const card = document.createElement('div');
-      card.className = 'contact-card bg-gray-50 dark:bg-gray-700 rounded-md p-3 flex justify-between items-center';
+      card.className = 'contact-card glass-card rounded-md p-3 flex justify-between items-center';
       
       card.innerHTML = `
         <div>
           <div class="font-medium">${email}</div>
-          <div class="text-sm text-gray-500 dark:text-gray-400">
-            <i class="ri-whatsapp-line text-green-500 mr-1"></i> ${formatPhoneNumber(phone)}
+          <div class="text-sm text-white/60">
+            <i class="ri-whatsapp-line text-accent mr-1"></i> ${formatPhoneNumber(phone)}
           </div>
         </div>
         <div class="flex space-x-2">
-          <button class="edit-contact-btn p-1.5 text-gray-500 hover:text-indigo-600 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600">
+          <button class="edit-contact-btn p-1.5 text-white/60 hover:text-accent rounded-full hover:bg-white/5">
             <i class="ri-edit-line"></i>
           </button>
-          <button class="delete-contact-btn p-1.5 text-gray-500 hover:text-red-600 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600">
+          <button class="delete-contact-btn p-1.5 text-white/60 hover:text-red-500 rounded-full hover:bg-white/5">
             <i class="ri-delete-bin-line"></i>
           </button>
         </div>
